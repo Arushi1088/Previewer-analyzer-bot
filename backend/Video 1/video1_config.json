@@ -1,0 +1,15 @@
+{
+  "video_name": "Video 1 - Meeting with Venkat Gopal (Password Protected + Highly Confidential Excel on iPhone)",
+  "scenario": {
+    "platform": "iOS",
+    "surface": "Outlook Mobile → Excel Mobile",
+    "open_path": "OneDrive Business attachment",
+    "file_size": "medium",
+    "protection": "password + sensitivity label (Highly Confidential)",
+    "account_state": "primary",
+    "expected_flow": "User should be able to open the password-protected and sensitivity-labeled Excel file smoothly on iPhone via Outlook → Previewer → Excel Mobile. Errors should be presented in mobile-optimized dialogs, state transitions should be stable, and UI should follow Fluent Mobile design guidelines."
+  },
+  "summary": {
+    "total_bugs": 4
+  }
+}

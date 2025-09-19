@@ -1,0 +1,10 @@
+scenario_id: no_app_install_required_003
+source_apps: Outlook,ExcelPreviewer
+file_size_bucket: small
+protection_level: none
+file_type: xlsx
+notes: No Excel app installed - should show install guidance
+
+
+
+

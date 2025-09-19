@@ -1,0 +1,12 @@
+{
+  "scenario_id": "account_mismatch_secondary_primary_004",
+  "source_apps": ["Outlook", "ExcelPreviewer", "ExcelDesktop"],
+  "file_size_bucket": "medium",
+  "protection_level": "confidential",
+  "file_type": "xlsx",
+  "notes": "Secondary account in Outlook, Primary in Excel - should handle account switching gracefully"
+}
+
+
+
+

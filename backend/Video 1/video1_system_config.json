@@ -1,0 +1,12 @@
+{
+  "scenario_id": "video1_password_protected_highly_confidential",
+  "source_apps": ["Outlook", "ExcelPreviewer", "ExcelDesktop"],
+  "file_size_bucket": "medium",
+  "protection_level": "highly_confidential",
+  "file_type": "xlsx",
+  "notes": "Password protected + Highly Confidential Excel file on iPhone via Outlook → Previewer → Excel Mobile. Expected smooth flow with mobile-optimized dialogs and Fluent Mobile design guidelines."
+}
+
+
+
+

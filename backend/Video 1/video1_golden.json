@@ -1,0 +1,98 @@
+{
+  "video_name": "Video 1 - Meeting with Venkat Gopal (Password Protected + Highly Confidential Excel on iPhone)",
+  "expected_flow": "User should be able to open the password-protected and sensitivity-labeled Excel file smoothly on iPhone via Outlook → Previewer → Excel Mobile. Errors should be presented in mobile-optimized dialogs, state transitions should be stable, and UI should follow Fluent Mobile design guidelines.",
+  "issues": [
+    {
+      "id": 1,
+      "title": "Web-style error dialog shown on mobile",
+      "category": "Functional",
+      "type": "OpenFlowConflict",
+      "severity": "Orange",
+      "description": "A large-screen web error dialog (with 'Open in Desktop App') appears inside the Previewer instead of a mobile-optimized error message.",
+      "expected": "Error messages should follow Fluent Mobile design guidelines, with appropriate copy for mobile context (e.g., 'Open in Excel Mobile').",
+      "actual": "The Previewer displayed a web-style dialog with desktop-specific CTAs and font sizes.",
+      "impact": "Looks out of place, confuses users about available options, and suggests incorrect flow (desktop only).",
+      "evidence": [
+        {
+          "timestamp": "6000",
+          "note": "Foreground dialog says 'Open in desktop app', sized for large screens."
+        }
+      ],
+      "guideline_refs": [
+        "error.dialog.mobile-consistency"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Redundant failure messaging instead of direct app open",
+      "category": "Functional",
+      "type": "AccessControl",
+      "severity": "Orange",
+      "description": "Previewer fails, then tells the user to open in desktop/mobile app instead of directly handing off to Excel Mobile.",
+      "expected": "If Previewer cannot open password + sensitivity-labeled files, detect Excel Mobile installation and directly open there.",
+      "actual": "User sees failure dialog and must manually select 'Open in Desktop App', even though Excel Mobile is available.",
+      "impact": "Adds unnecessary friction, forces user through redundant steps, lowers trust in product reliability.",
+      "evidence": [
+        {
+          "timestamp": "8000",
+          "note": "User taps 'Open in Desktop App' manually before Excel Mobile opens."
+        }
+      ],
+      "guideline_refs": [
+        "flow.redundant.hand-off"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Excessive state flicker during password prompt",
+      "category": "Craft",
+      "type": "StateStacking",
+      "severity": "Yellow",
+      "description": "Too many state changes between 10s–13s: blank canvas → header with progress bar → shimmer grid → password dialog.",
+      "expected": "Minimal, stable transition: load canvas shimmer once, then directly show password dialog.",
+      "actual": "UI flickers between multiple intermediate states within 3 seconds.",
+      "impact": "Reduces visual stability and user confidence; product feels disjointed.",
+      "evidence": [
+        {
+          "timestamp": "10000-13000",
+          "note": "Observed multiple flicker transitions before password dialog appears."
+        }
+      ],
+      "guideline_refs": [
+        "motion.stability.visual-consistency"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Password dialog not aligned with Fluent Mobile",
+      "category": "Craft",
+      "type": "VisualCraft",
+      "severity": "Yellow",
+      "description": "Password prompt follows native iOS styling, not Microsoft Fluent Mobile guidelines.",
+      "expected": "Dialogs in Excel Mobile should follow Fluent Mobile type ramp, layout, and branding.",
+      "actual": "Password dialog appears as a native iOS modal with inconsistent design language.",
+      "impact": "Creates inconsistency and reduces trust in app’s design coherence.",
+      "evidence": [
+        {
+          "timestamp": "13000",
+          "note": "Password entry box uses iOS native style, not Fluent UI."
+        }
+      ],
+      "guideline_refs": [
+        "dialog.design.fluent-mobile"
+      ]
+    }
+  ],
+  "meta": {
+    "platform": "iOS",
+    "surface": "Outlook Mobile → Excel Mobile",
+    "open_path": "OneDrive Business attachment",
+    "file_size": "medium",
+    "protection": "password + sensitivity label (Highly Confidential)",
+    "account_state": "primary",
+    "notes": "Transcript covered ~0–21s. Key problems: inconsistent error handling, redundant flows, visual instability, non-Fluent password dialog."
+  },
+  "summary": {
+    "total_bugs": 4
+  }
+}

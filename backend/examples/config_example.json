@@ -1,0 +1,9 @@
+{
+  "scenario_id": "outlook_preview_to_excel_001",
+  "source_apps": ["Outlook", "ExcelPreviewer", "ExcelDesktop"],
+  "file_size_bucket": "medium",
+  "protection_level": "confidential",
+  "file_type": "xlsx",
+  "notes": "Open attachment in Previewer → Open in Desktop → edit."
+}
+

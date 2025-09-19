@@ -1,0 +1,89 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Scenario Report — {{scenario_id}}</title>
+    <style>
+      body{font-family:system-ui,Arial;padding:24px;max-width:1100px;margin:auto}
+      .meta{color:#555}
+      .frame{margin:10px 0}
+      img{max-width:100%;border:1px solid #ddd;border-radius:6px}
+      .bug{border:1px solid #ddd;padding:12px;border-radius:8px;margin:10px 0}
+      .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:#eee;margin-right:6px}
+      .high{background:#ffd1d1}
+      .critical{background:#ffb3b3}
+      .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .code{font-family:ui-monospace, SFMono-Regular, Menlo, monospace}
+      .section{margin-top:24px}
+    </style>
+  </head>
+  <body>
+    <h1>Scenario Report — {{scenario_id}}</h1>
+    <div class="meta">Generated: {{generated}}</div>
+
+    <div class="section">
+      <h2>Configuration</h2>
+      <ul>
+        <li>Source apps: {{ ", ".join(cfg.source_apps) }}</li>
+        <li>File size bucket: <strong>{{ cfg.file_size_bucket }}</strong></li>
+        <li>Protection: <strong>{{ cfg.protection_level }}</strong></li>
+        <li>File type: <strong>{{ cfg.file_type }}</strong></li>
+        {% if cfg.notes %}<li>Notes: {{ cfg.notes }}</li>{% endif %}
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Timeline Frames</h2>
+      <div class="grid">
+      {% for f in frames %}
+        <div class="frame">
+          <div class="meta">[#{{f.index}}] t={{f.ts_ms}}ms</div>
+          <img src="/static/{{f.path.split('static/')[1]}}" alt="frame {{f.index}}"/>
+        </div>
+      {% endfor %}
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Detected Steps</h2>
+      <ul>
+      {% for s in llm.get("steps", []) %}
+        <li><strong>Step {{s.get("step_no")}}</strong>: {{s.get("summary")}} — frames: {{s.get("frames")}}</li>
+      {% else %}
+        <em>No steps detected.</em>
+      {% endfor %}
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Bugs</h2>
+      {% set allbugs = (llm.get("bugs") or []) + (llm.get("bugs_strong") or []) + (llm.get("bugs_minor") or []) %}
+      {% for b in allbugs %}
+        <div class="bug">
+          <h3>{{b.get("title","(no title)")}}</h3>
+          <div>
+            <span class="pill {{b.get('severity','').lower()}}">Severity: {{b.get("severity","")}}</span>
+            <span class="pill">Category: {{b.get("category","")}}</span>
+          </div>
+          <div>Evidence frames: {{b.get("evidence_frames",[])}}</div>
+          <p>{{b.get("description","")}}</p>
+          {% if b.get("suggestions") %}<div><strong>Suggestions:</strong> {{b.get("suggestions")}}</div>{% endif %}
+        </div>
+      {% else %}
+        <em>No bugs detected.</em>
+      {% endfor %}
+    </div>
+
+    {% if eval %}
+    <div class="section">
+      <h2>Eval vs Golden List</h2>
+      <ul>
+        <li>Precision: <strong>{{eval.precision}}</strong>, Recall: <strong>{{eval.recall}}</strong>, F1: <strong>{{eval.f1}}</strong></li>
+        <li>Missed (FN): {{eval.missed}}</li>
+        <li>Extras (FP): {{eval.extras}}</li>
+      </ul>
+    </div>
+    {% endif %}
+  </body>
+</html>
